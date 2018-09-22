@@ -1,0 +1,86 @@
+FROM php:7.0-fpm-alpine as soporte-base
+
+MAINTAINER Geronimo Afonso <geroafonso21@gmail.com>
+
+# setup workdir
+RUN mkdir /data
+
+WORKDIR /data
+
+ENV HOME /data
+
+# requirements and PHP extensions
+RUN apk add --update \
+    wget \
+    unzip \
+    msmtp \
+    ca-certificates \
+    supervisor \
+    nginx \
+    libpng \
+    c-client \
+    openldap \
+    libintl \
+    libxml2 \
+    icu \
+    openssl \
+    mysql-client && \
+    apk add imap-dev libpng-dev curl-dev openldap-dev gettext-dev libxml2-dev icu-dev autoconf g++ make pcre-dev && \
+    docker-php-ext-install gd curl ldap mysqli sockets gettext mbstring xml intl opcache && \
+    docker-php-ext-configure imap --with-imap-ssl && \
+    docker-php-ext-install imap && \
+    pecl install apcu && docker-php-ext-enable apcu && \
+    apk del imap-dev libpng-dev curl-dev openldap-dev gettext-dev libxml2-dev icu-dev autoconf g++ make pcre-dev && \
+    rm -rf /var/cache/apk/*
+
+#Download languages packs
+RUN mkdir -p /language-pack/i18n && wget -nv -O /language-pack/i18n/fr.phar http://osticket.com/sites/default/files/download/lang/fr.phar && \
+    wget -nv -O /language-pack/i18n/ar.phar http://osticket.com/sites/default/files/download/lang/ar.phar && \
+    wget -nv -O /language-pack/i18n/pt_BR.phar http://osticket.com/sites/default/files/download/lang/pt_BR.phar && \
+    wget -nv -O /language-pack/i18n/it.phar http://osticket.com/sites/default/files/download/lang/it.phar && \
+    wget -nv -O /language-pack/i18n/es_ES.phar http://osticket.com/sites/default/files/download/lang/es_ES.phar && \
+    wget -nv -O /language-pack/i18n/de.phar http://osticket.com/sites/default/files/download/lang/de.phar
+
+#Ldap plugin
+RUN wget -nv -O /language-pack/auth-ldap.phar http://osticket.com/sites/default/files/download/plugin/auth-ldap.phar
+
+ENV USER testa-docker
+
+ENV PASS Buffalo1
+
+ENV SOPORTE_RELEASE_URL https://$USER:$PASS@bitbucket.org/testa-team/soporte/get/develop.tar.gz
+
+ADD $SOPORTE_RELEASE_URL /tmp/release.tar.gz
+
+RUN mkdir -p /data/ && tar -xf /tmp/release.tar.gz -C /data --strip-components=1 
+
+RUN rm -rf /data/upload/include/i18n.dist && mv /language-pack/i18n /data/upload/include/i18n.dist && mv /language-pack/auth-ldap.phar /data/upload/include/plugins/auth-ldap.phar
+
+RUN rm -rf /data/upload/setup_hidden && mv /data/upload/setup /data/upload/setup_hidden \
+	&& chmod -R a+rX /data/upload/ /data/scripts/\
+	&& chmod -R u+rw /data/upload/ /data/scripts/\
+	&& chmod 700 /data/upload/setup_hidden
+
+#Logs to sterr and stdout
+RUN ln -sfT /dev/stderr /var/log/nginx/soporte-error.log \
+	&& ln -sfT /dev/stdout /var/log/nginx/soporte-access.log \
+	&& ln -sfT /dev/stdout /var/log/cron.log
+
+# Archivos de configuracion: nginx, PHP, msmtp and supervisor
+RUN mv /data/docker/conf/nginx.conf /etc/nginx/nginx.conf \
+	&& cp /data/docker/conf/php-osticket.ini $PHP_INI_DIR/conf.d/ \
+	&& cp /data/docker/conf/php.ini $PHP_INI_DIR/php.ini \
+	&& touch /var/log/msmtp.log \
+	&& chown www-data:www-data /var/log/msmtp.log
+
+RUN chown -R www-data:www-data /data
+
+RUN chown -R root:root /data/upload/setup_hidden
+
+VOLUME "/data/upload/include/plugins"
+
+VOLUME "/data/upload/include/i18n"
+
+EXPOSE 80
+
+CMD ["/data/docker/bin/start.sh"]

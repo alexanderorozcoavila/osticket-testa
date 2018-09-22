@@ -1,0 +1,32 @@
+2018-07-30 00:02:47,207 CRIT Supervisor running as root (no user in config file)
+2018-07-30 00:02:47,212 INFO supervisord started with pid 6
+2018-07-30 00:02:48,217 INFO spawned: 'cron' with pid 17
+2018-07-30 00:02:48,220 INFO spawned: 'nginx' with pid 18
+2018-07-30 00:02:48,224 INFO spawned: 'php-fpm' with pid 19
+2018-07-30 00:02:49,288 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2018-07-30 00:02:49,289 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2018-07-30 00:02:49,289 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2018-07-30 21:29:38,739 CRIT Supervisor running as root (no user in config file)
+2018-07-30 21:29:38,774 INFO supervisord started with pid 6
+2018-07-30 21:29:39,779 INFO spawned: 'cron' with pid 17
+2018-07-30 21:29:39,788 INFO spawned: 'nginx' with pid 18
+2018-07-30 21:29:39,792 INFO spawned: 'php-fpm' with pid 19
+2018-07-30 21:29:41,023 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2018-07-30 21:29:41,024 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2018-07-30 21:29:41,026 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2018-08-02 12:29:27,851 CRIT Supervisor running as root (no user in config file)
+2018-08-02 12:29:27,883 INFO supervisord started with pid 6
+2018-08-02 12:29:28,891 INFO spawned: 'cron' with pid 17
+2018-08-02 12:29:28,898 INFO spawned: 'nginx' with pid 18
+2018-08-02 12:29:28,903 INFO spawned: 'php-fpm' with pid 19
+2018-08-02 12:29:30,187 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2018-08-02 12:29:30,188 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2018-08-02 12:29:30,189 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2018-08-02 14:10:15,639 CRIT Supervisor running as root (no user in config file)
+2018-08-02 14:10:15,660 INFO supervisord started with pid 6
+2018-08-02 14:10:16,669 INFO spawned: 'cron' with pid 17
+2018-08-02 14:10:16,676 INFO spawned: 'nginx' with pid 18
+2018-08-02 14:10:16,681 INFO spawned: 'php-fpm' with pid 19
+2018-08-02 14:10:17,875 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2018-08-02 14:10:17,876 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2018-08-02 14:10:17,877 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)

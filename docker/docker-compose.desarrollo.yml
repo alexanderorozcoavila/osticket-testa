@@ -1,0 +1,59 @@
+version: '2'
+
+volumes:
+    soporte-database-desarrollo:
+    soporte-setup:
+    soporte-plugins:
+    soporte-language-pack:
+services:
+  soporte:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile-develop
+    environment:
+      ADMIN_EMAIL: admin.soporte@testa.digital.
+      SOPORTE_SMTP_HOST: 'localhost'
+      SOPORTE_SMTP_TLS: 'off'
+      SOPORTE_SMTP_PORT: 25
+      SOPORTE_SMTP_USER: 'user@soporte-server.com'
+      SOPORTE_SMTP_PASSWORD: 'soportepass'
+      SOPORTE_DATABASE_PREFIX: soporte_
+      SOPORTE_DATABASE_HOST: mysql
+      SOPORTE_DATABASE_NAME: soporte
+      SOPORTE_DATABASE_USER: support_usr
+      SOPORTE_DATABASE_PASSWORD: S0p13fa43123g
+      SOPORTE_NAME: GERONIMO - SOPORTE SITEMA DE TICKETS
+      SOPORTE_EMAIL: soporte@osticket.com
+      SOPORTE_ADMIN_FIRSTNAME: admin
+      SOPORTE_ADMIN_LASTNAME: soporte
+      SOPORTE_ADMIN_EMAIL: admin.soporte@testa.digital.
+      SOPORTE_ADMIN_USERNAME: admin
+      SOPORTE_ADMIN_PASSWORD: Admin123.
+      SOPORTE_INSTALLED: 'TRUE'
+      CRON_INTERVAL: 0
+      SOPORTE_COOKIE_NAME: devshell-proxy-session
+    command:
+    - /bin/sh
+    - -c
+    - sed -i "s*session_name('OSTSESSID');*session_name(getenv('SOPORTE_COOKIE_NAME'));*g" /data/upload/include/class.ostsession.php && sh /data/docker/bin/start.sh
+    ports:
+    - 3399:80
+    volumes:
+    - ../:/data
+    - soporte-setup:/data/upload/setup_hidden
+    - soporte-language-pack:/data/upload/include/i18n.dist
+    - soporte-plugins:/data/upload/include/plugins
+    links:
+    - mysql:mysql
+  mysql:
+#    image: mysql:5.7
+    build: 
+      context: .
+      dockerfile: Dockerfile.db
+    environment:
+      MYSQL_USER: support_usr
+      MYSQL_PASSWORD: S0p13fa43123g
+      MYSQL_DATABASE: soporte
+      MYSQL_ROOT_PASSWORD: asd9f13FA120f
+    volumes:
+    - soporte-database-desarrollo:/var/lib/mysql

@@ -1,0 +1,5 @@
+.git
+/docker/docker-compose.desarrollo.yml
+/docker/Dockerfile-devel
+/docker/Dockerfile-prod
+

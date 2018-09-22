@@ -1,0 +1,54 @@
+version: '2'
+
+volumes:
+    soporte-prod-database:
+    soporte-prod-plugins:
+    soporte-prod-pack-language:
+
+services:
+  soporte:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile-prod
+    environment:
+      ADMIN_EMAIL: admin.soporte@testa.digital.
+      SOPORTE_SMTP_HOST: 'localhost'
+      SOPORTE_SMTP_TLS: 'off'
+      SOPORTE_SMTP_PORT: 25
+      SOPORTE_SMTP_USER: 'user@soporte-server.com'
+      SOPORTE_SMTP_PASSWORD: 'soportepass'
+      SOPORTE_DATABASE_PREFIX: soporte_
+      SOPORTE_DATABASE_HOST: mysql
+      SOPORTE_DATABASE_NAME: soporte
+      SOPORTE_DATABASE_USER: support_usr
+      SOPORTE_DATABASE_PASSWORD: S0p13fa43123g
+      SOPORTE_NAME: Soporte sistema de tickets - PRODUCCION
+      SOPORTE_EMAIL: soporte@osticket.com
+      SOPORTE_ADMIN_FIRSTNAME: admin
+      SOPORTE_ADMIN_LASTNAME: soporte
+      SOPORTE_ADMIN_EMAIL: admin.soporte@testa.digital.
+      SOPORTE_ADMIN_USERNAME: admin
+      SOPORTE_ADMIN_PASSWORD: Admin123.
+      SOPORTE_INSTALLED: 'TRUE'
+      CRON_INTERVAL: 0
+      SOPORTE_COOKIE_NAME: OSTSESSID
+    ports:
+    - 80:80
+    volumes:
+    - soporte-prod-plugins:/data/upload/include/plugins
+    - soporte-prod-pack-language:/data/upload/include/i18n
+    links:
+    - mysql:mysql
+  mysql:
+#    image: mysql:5.7
+    build: 
+      context: .
+      dockerfile: Dockerfile.db
+    environment:
+      MYSQL_USER: support_usr
+      MYSQL_PASSWORD: S0p13fa43123g
+      MYSQL_DATABASE: soporte
+      MYSQL_ROOT_PASSWORD: asd9f13FA120f
+    volumes:
+    - soporte-prod-database:/var/lib/mysql
+
